@@ -1,1 +1,4 @@
 trash/
+data/
+results/
+*.pyc
