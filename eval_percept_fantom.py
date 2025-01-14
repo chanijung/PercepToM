@@ -174,7 +174,6 @@ class FantomEvalAgent():
         self.output_filename_suffix = '_{}_input_{}.json'.format(self.args.conversation_input_type, self.args.model)
         self.load_fantom()
         self.setup_fantom()
-        # self.model = self.load_model()
         self.model = load_model(self.args.model)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.embedder = SentenceTransformer('sentence-transformers/all-roberta-large-v1').to(self.device)
@@ -956,20 +955,7 @@ def get_timestamp():
     return timestamp
 
 def main(args):
-
-    # EVAL_DIR_PATH_SUFFIX = f"{args.model}-{args.method}"
-    # if args.num_conv:
-    #     EVAL_DIR_PATH_SUFFIX += f"-numConv_{args.num_conv}"
-    # if len(args.run_name)>0:
-    #     EVAL_DIR_PATH_SUFFIX += f"_{args.run_name}"
-    # # EVAL_DIR_PATH_SUFFIX += f"-{get_timestamp()}"
     
-    # EVAL_DIR_PATH = os.path.join('results', 'Percept-FANToM', EVAL_DIR_PATH_SUFFIX)
-    
-    # if args.method=="perceptom":
-    #     PERC_INF_RESULT_DIR = f"results/Percept-FANToM/{EVAL_DIR_PATH_SUFFIX.replace('perceptom','perc_inf')}"
-    #     print("perc_inf_result_dir: ", PERC_INF_RESULT_DIR)
-
     random.seed(RANDOM_SEED)
 
     evaluator = FantomEvalAgent(args)
@@ -992,7 +978,6 @@ def main(args):
     evaluator.run()
     
     # Save evaluation result in csv
-
     evaluated_responses_filename = "evaluated_responses" + evaluator.output_filename_suffix
     evaluated_responses_path = os.path.join(EVAL_DIR_PATH, evaluated_responses_filename)
 
@@ -1063,7 +1048,6 @@ if __name__ == '__main__':
         EVAL_DIR_PATH_SUFFIX += f"-numConv_{args.num_conv}"
     if len(args.run_name)>0:
         EVAL_DIR_PATH_SUFFIX += f"_{args.run_name}"
-    # EVAL_DIR_PATH_SUFFIX += f"-{get_timestamp()}"
 
     EVAL_DIR_PATH = os.path.join('results', 'Percept-FANToM', EVAL_DIR_PATH_SUFFIX)
 

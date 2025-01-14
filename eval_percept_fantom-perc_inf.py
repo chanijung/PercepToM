@@ -8,24 +8,38 @@ from tqdm import tqdm
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--working-dir", type=str, default='results/Percept-FANToM')
-    parser.add_argument("--model-name", type=str, required=True, choices=[
-        'gpt-4-1106-Preview', 
-        'gpt-35-turbo-1106', 
-        'gpt-4o',
-        'claude-3-haiku-20240307',
-        'claude-3-sonnet-20240229',
-        'gemini-pro',
-        'Llama-3-70b-chat-hf',
-        'Mixtral-8x22B-Instruct-v0.1',
-        help = "The model to use."
-    ]) 
-    parser.add_argument("--method", type=str, required=True, choices=[
-        'perc_inf', 
-        'perceptom', 
-        help = "The method from which the result will be evaluated (default: perc_inf)."
-    ]) 
-    parser.add_argument("--gt-perc-inf-path", type=str, default="dataset/Percept_FANToM/Percept-FANToM.csv")
+    parser.add_argument(
+        "--model",
+        type=str,
+        required=True,
+        choices=[
+            "gpt-35-turbo-1106",
+            "gpt-4o",
+            "gpt-4-1106-Preview",
+            "claude-3-haiku-20240307",
+            "claude-3-sonnet-20240229",
+            "gemini-pro",
+            "Llama-3-70b-chat-hf",
+            "Mixtral-8x22B-Instruct-v0.1"
+        ],
+        help="The model to use."
+    )
+    parser.add_argument(
+        "--method",
+        type=str,
+        default="perc_inf",
+        choices=["perc_inf", "perceptom"],
+        help="The method from which the result will be evaluated (default: perc_inf)."
+    )
+    parser.add_argument(
+        "--run_name",
+        type=str,
+        required=False,
+        default=None,
+        help="The run name specified for the method run (default: None)."
+    )
+    parser.add_argument('--num_conv', type=int, default=None, 
+                        help="Number of sample conversations to use (default: None).")
     args = parser.parse_args()
     return args
 
@@ -33,11 +47,18 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     
-    model_dir = Path(args.working_dir) / f'{args.model_name}-{args.method}'
-    model_name = args.model_name 
-    result_path = model_dir / f"evaluated_responses_short_input_{args.model_name}.csv"
+    # model_dir = Path(args.working_dir) / f'{args.model}-{args.method}'
+    EVAL_DIR_PATH_SUFFIX = f"{args.model}-{args.method}"
+    if args.num_conv:
+        EVAL_DIR_PATH_SUFFIX += f"-numConv_{args.num_conv}"
+    if args.run_name:
+        EVAL_DIR_PATH_SUFFIX += f"_{args.run_name}"
+    import os
+    model_dir = os.path.join('results', 'Percept-FANToM', EVAL_DIR_PATH_SUFFIX)
+
+    result_path = model_dir / Path(f"evaluated_responses_short_input_{args.model}.csv")
     result_df = pd.read_csv(result_path)
-    gt_perc_inf_df = pd.read_csv(args.gt_perc_inf_path)
+    gt_perc_inf_df = pd.read_csv("dataset/Percept_FANToM/Percept-FANToM.csv")
     cont_utter_2_perc = defaultdict(dict)
     for _, row in gt_perc_inf_df.iterrows():
         pid = row['part_id']
@@ -128,18 +149,12 @@ if __name__ == '__main__':
         ctx_result['perceiver_prediction'].append(perceiver_prediction)
         ctx_result['perceiver_accuracy'].append(acc)
     df_ctx = pd.DataFrame(ctx_result)
-    df_ctx.to_csv(model_dir / f'evaluated_context.csv', index=False)
-    print(f"Context evaluation result saved in 'evaluated_context.csv'")
+    df_ctx.to_csv(model_dir / Path('evaluated_context.csv'), index=False)
+    print(f"Context-level evaluation result saved in 'evaluated_context.csv'")
 
     df_utter = pd.DataFrame(utter_result)
-    df_utter.to_csv(model_dir/ f'evaluated_utterance.csv', index=False)
-    print(f"Utterance evaluation result saved in 'evaluated_utterance.csv'")
-    # invalid_keys_df = df_utter[df_utter["gt"]==""]
-    # print(f"{len(invalid_keys_df.utter.unique())} unique invalid keys:")
-    # for u in invalid_keys_df.utter.unique():
-    #     row = invalid_keys_df[invalid_keys_df.utter==u].iloc[0]
-    #     print("<key>\n",row.utter)
-    #     print()
+    df_utter.to_csv(model_dir/ Path('evaluated_utterance.csv'), index=False)
+    print(f"Utterance-level evaluation result saved in 'evaluated_utterance.csv'\n")
     df_ctx_sets = df_ctx.drop_duplicates(subset=['set_id'], keep='last')
     result_df_sets = result_df.drop_duplicates(subset=['set_id'], keep='last')
     overall_acc_utter = round(df_ctx_sets['perceiver_accuracy'].mean(),3)
@@ -147,7 +162,6 @@ if __name__ == '__main__':
 
     accs_utt = [overall_acc_utter]
     accs_context = [overall_acc_context]
-    num_valid_sets = [len(df_ctx_sets)]
     num_total_sets = [len(result_df_sets)]
 
     for accessibility in ["accessible", "inaccessible"]:
@@ -159,11 +173,10 @@ if __name__ == '__main__':
         accs_acc_context = round((df_cont_accs_sets['perceiver_accuracy']==1).mean(), 3)
         accs_utt.append(accs_acc_utter)
         accs_context.append(accs_acc_context)
-        num_valid_sets.append(len(df_cont_accs_sets))
         num_total_sets.append(len(result_df_accs_sets))
 
-    acc_df = pd.DataFrame([accs_utt, accs_context, num_valid_sets, num_total_sets], index=["utterance_level acc", "context-level acc", "# valid sets", "# total sets"], columns=["overall", "accessible", "inaccessible"])
+    acc_df = pd.DataFrame([accs_utt, accs_context, num_total_sets], index=["Utterance-level Acc. (Perc. Inf. Acc.)", "Context-level Acc.", "# Total Sets"], columns=["Overall", "True Belief", "False Belief"])
     print(acc_df)
 
-    acc_df.to_csv(model_dir / f'perception_inference_accuracy.csv')
+    acc_df.to_csv(model_dir / Path('perception_inference_accuracy.csv'))
     print(f"Accuracies saved in 'perception_inference_accuracy.csv'")
