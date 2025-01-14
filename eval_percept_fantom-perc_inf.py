@@ -17,7 +17,13 @@ def parse_args():
         'claude-3-sonnet-20240229',
         'gemini-pro',
         'Llama-3-70b-chat-hf',
-        'Mixtral-8x22B-Instruct-v0.1'
+        'Mixtral-8x22B-Instruct-v0.1',
+        help = "The model to use."
+    ]) 
+    parser.add_argument("--method", type=str, required=True, choices=[
+        'perc_inf', 
+        'perceptom', 
+        help = "The method from which the result will be evaluated (default: perc_inf)."
     ]) 
     parser.add_argument("--gt-perc-inf-path", type=str, default="dataset/Percept_FANToM/Percept-FANToM.csv")
     args = parser.parse_args()
@@ -27,7 +33,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     
-    model_dir = Path(args.working_dir) / f'{args.model_name}-perc_inf'
+    model_dir = Path(args.working_dir) / f'{args.model_name}-{args.method}'
     model_name = args.model_name 
     result_path = model_dir / f"evaluated_responses_short_input_{args.model_name}.csv"
     result_df = pd.read_csv(result_path)
