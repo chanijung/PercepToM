@@ -4,7 +4,7 @@ This repository contains the code and dataset for the paper ["**Perceptions to B
 
 ### Percept-ToMi
 
-`datasets/Percept-ToMi.csv`
+`dataset/Percept-ToMi.csv`
 
 - `index`: Index of each story
 - `qtype`: Type of the question paired with the story
@@ -15,14 +15,14 @@ This repository contains the code and dataset for the paper ["**Perceptions to B
 
 ### Percept-FANToM
 
-1. `datasets/Percept-FANToM.csv`
+1. `dataset/Percept_FANToM/Percept-FANToM.csv`
 
    - `part_id`: ID of each conversation part in FANToM
    - `utterance`: Single utterance in a conversation part
    - `utterance_symbol_removed`: Symbol-removed utterance
    - `perceivers`: Perceivers of the utterance
 
-2. `datasets/Percept-FANToM-conv_with_perceivers.csv`
+2. `dataset/Percept_FANToM/Percept-FANToM-conv_with_perceivers.csv`
 
    - `part_id`: ID of each conversation part in FANToM
    - `conversation_with_perceivers`: Utterances in the conversation part paired with corresponding perceivers. Formatted to provide ground truth perception information to the language model. 
