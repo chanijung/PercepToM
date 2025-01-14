@@ -94,7 +94,7 @@ if __name__ == '__main__':
         'context': [],
         'question_type': [],
         'question': [],
-        'result': [],
+        # 'result': [],
         'perceiver_prediction': [],
         'perceiver_gt': [],
         'perceiver_accuracy': []
@@ -156,18 +156,20 @@ if __name__ == '__main__':
         ctx_result['context'].append(row['story'])
         ctx_result['question_type'].append(row['qType'])
         ctx_result['question'].append(row['question'])
-        ctx_result['result'].append(row['correctness'])
+        # ctx_result['result'].append(row['correctness'])
         ctx_result['perceiver_gt'].append(perceiver_gt)
         ctx_result['perceiver_prediction'].append(perceiver_prediction)
         ctx_result['perceiver_accuracy'].append(acc)
 
     df_ctx = pd.DataFrame(ctx_result)
     df_ctx.to_csv( logs_dir / f'evaluated_context.csv', index=False)
+    print(f"Context-level evaluation result saved in 'evaluated_context.csv'")
 
     df_utter = pd.DataFrame(utter_result)
     df_utter.to_csv( logs_dir / f'evaluated_utterance.csv', index=False)
+    print(f"Scene-level evaluation result saved in 'evaluated_utterance.csv'")
 
-    print(f"\n<Perception inference accuracy (defined in the paper)>")
+    print(f"\n<Utterance-level Acc. (Perc. Inf. Acc. defined in the paper)>")
     accs = []
     num_valid = []
     num_total = []
@@ -180,15 +182,15 @@ if __name__ == '__main__':
         num_total.append((len(result_df[result_df['qType'] == qtype])))
         print(f"{qtype:>19} {acc:.3f}")
 
-    print(f"\n<Perception inference accuracy based on binary correctness of each context>")
+    print(f"\n<Context-level Acc.>")
     print(f"{'overall':>19} {(df_ctx['perceiver_accuracy'] == 1).mean():.3f} ({len(df_ctx)})")
     for qtype in ["first_order_no_tom", "first_order_tom", "second_order_no_tom", "second_order_tom"]:
         df_qtype = df_ctx[df_ctx['question_type'] == qtype]
-        print(f"{qtype:>19} {(df_qtype['perceiver_accuracy'] == 1).mean():.3f} ({len(df_qtype)}) ({df_qtype.context_id.isin(df_utter[df_utter['gt']==''].context_id).sum()} w/ invalid key)")
+        print(f"{qtype:>19} {(df_qtype['perceiver_accuracy'] == 1).mean():.3f} ({len(df_qtype)})")
     
     result_df["num_scenes"] = totals
     
-    acc_qtype_df = pd.DataFrame([accs, num_valid, num_total], index=["acc", "# valid samples", "# total samples"], columns=["first order true belief", "first order false belief", "second order true belief", "second order false belief"]).round(3)
+    acc_qtype_df = pd.DataFrame([accs, num_valid,  num_total], index=["acc", "# valid samples", "# total samples"], columns=["first order true belief", "first order false belief", "second order true belief", "second order false belief"]).round(3)
     acc_qtype_df.to_csv(logs_dir / "acc_qType.csv")
     
     scenario_accs = []
@@ -206,6 +208,6 @@ if __name__ == '__main__':
         scenario_accs.append(scenario_acc)
         num_valids.append(num_valid)
         num_totals.append(num_total)
-    acc_scenario_df = pd.DataFrame([scenario_accs, num_valids, num_totals], index=["acc", "num_valid", "num_total"], columns=["true belief", "false belief"]).round(3)
+    acc_scenario_df = pd.DataFrame([scenario_accs, num_valids, num_totals], index=["acc", "num_valids", "num_total"], columns=["true belief", "false belief"]).round(3)
     acc_scenario_df.to_csv(logs_dir / "acc_scenario.csv")
-    print(f"\n<Final perception inference accuracy aggregating first and second order questions>\n{acc_scenario_df}")
+    print(f"\n<Utterance-level Acc. aggregating first and second order questions>\n{acc_scenario_df}")
