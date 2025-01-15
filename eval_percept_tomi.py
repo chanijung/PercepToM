@@ -8,7 +8,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
-from utils import load_model, final_answer_prompt_formatting
+from llm_agents import load_model
 
 
 TOMI_QUESTION_TYPES = [
@@ -168,7 +168,18 @@ Answer: """
     return prompt
 
 
-import argparse
+def final_answer_prompt_formatting(model_name, reconstructed_story, rephrased_question):
+    max_length = 30
+    prompt = f"""Story: {reconstructed_story}.
+
+Question: {rephrased_question}"""
+    prompt += """ Assume that characters in the story can perceive every scene occurring in their location but not scenes occurring elsewhere. \
+State the most detailed position possible (e.g., in A in B). Answer in one sentence without explanation.
+
+Answer: """
+        
+    return prompt, max_length
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Parse arguments for running the model")

@@ -11,15 +11,13 @@ from tqdm import tqdm
 tqdm.pandas()
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from utils import load_model
+from llm_agents import load_model
 import sys
 sys.path.append(os.path.abspath("dataset/Percept_FANToM/task/dataset_loader.py"))
 import dataset.Percept_FANToM.task.dataset_loader as loader
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
-from utils import load_model, final_answer_prompt_formatting
 import pprint
 import re
-
 
 
 class FantomDataset(Dataset):
