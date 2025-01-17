@@ -2,3 +2,4 @@ trash/
 data/
 results/
 *.pyc
+eval_percept_tomi-w_perceptom_oracle.py
