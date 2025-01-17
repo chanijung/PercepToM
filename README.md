@@ -2,7 +2,7 @@ This repository contains the code and dataset for the paper ["**Perceptions to B
 
 ---
 # Table of Contents
-
+- [Requirements](#requirements)
 - [Perception-Augmented Theory of Mind Datasets](#perception-augmented-theory-of-mind-datasets)
   - [Percept-ToMi](#percept-tomi)
   - [Percept-FANToM](#percept-fantom)
