@@ -90,17 +90,17 @@ python eval_percept_tomi.py --model {model_name} --method {method_name}
 
 **Result files saved in `results/Percept-ToMi/{model_name}-{method_name}/`:**
 
-•`acc.csv`: Question answering accuracies for four qTypes — first order/second order, true belief (no ToM) / false belief (ToM)
+* `acc.csv`: Question answering accuracies for four qTypes — first order/second order, true belief (no ToM) / false belief (ToM)
 
-•`acc_raw.csv`: Question answering accuracies for eight qTypeRaws 
+* `acc_raw.csv`: Question answering accuracies for eight qTypeRaws 
 
-•`result.csv`: Evaluated results of each datapoint, including prompts, model responses, and correctness
+* `result.csv`: Evaluated results of each datapoint, including prompts, model responses, and correctness
 
 **Notes:**
 
-•For all methods except _perception inference_ (`perc_inf`), running this script performs language model inference and evaluation, producing all evaluation results.
+* For all methods except _perception inference_ (`perc_inf`), running this script performs language model inference and evaluation, producing all evaluation results.
 
-•The _perception inference_ method (`perc_inf`) does not perform question answering. Running the script with this method only performs language model inference and produces result.csv.
+* The _perception inference_ method (`perc_inf`) does not perform question answering. Running the script with this method only performs language model inference and produces result.csv.
 
 #### 2.**Perception Inference Evaluation (Only for** `perc_inf`**)**
 
@@ -112,13 +112,13 @@ python eval_percept_tomi-perc_inf.py --model {model_name} --method {method_name}
 
 **Result files saved in ```results/Percept-ToMi/{model_name}-{method_name}/``` (the same directory as step 1):**
 
-•`scene_level_eval.csv`: Model predictions and ground truth of scene-level perceivers
+* `scene_level_eval.csv`: Model predictions and ground truth of scene-level perceivers
 
-•`ctx_level_eval.csv`: Model predictions and ground truth of context (story)-level perceivers
+* `ctx_level_eval.csv`: Model predictions and ground truth of context (story)-level perceivers
 
-•`perc_inf_qType_acc.csv`: Perception inference accuracies for four qTypes — first order/second order, true belief (no ToM) / false belief (ToM)
+* `perc_inf_qType_acc.csv`: Perception inference accuracies for four qTypes — first order/second order, true belief (no ToM) / false belief (ToM)
 
-•`perc_inf_scenario_acc.csv`: Perception inference accuracies for two scenarios — true belief (no ToM) / false belief (ToM)
+* `perc_inf_scenario_acc.csv`: Perception inference accuracies for two scenarios — true belief (no ToM) / false belief (ToM)
 
 ### Experiments on the Percept-FANToM
 
@@ -132,17 +132,17 @@ python eval_percept_fantom.py --model {model_name} --method {method_name}
 
 **Result files saved in `results/Percept-FANToM/{model_name}-{method_name}/`:**
 
-• `REPORT_short_input_{model_name}.json`: Question answering accuracies for different question types of FANToM for the contexts of false belief scenarios
+*  `REPORT_short_input_{model_name}.json`: Question answering accuracies for different question types of FANToM for the contexts of false belief scenarios
 
-• `control_task_report_short_input_{model_name}.json`: Question answering accuracies for different question types of FANToM for the contexts of true belief scenarios
+*  `control_task_report_short_input_{model_name}.json`: Question answering accuracies for different question types of FANToM for the contexts of true belief scenarios
 
-• `evaluated_responses_short_input_{model_name}.json/csv`: Evaluated results of each datapoint, including prompts, model responses, and correctness
+*  `evaluated_responses_short_input_{model_name}.json/csv`: Evaluated results of each datapoint, including prompts, model responses, and correctness
 
 **Notes:**
 
-•For all methods except _perception inference_ (`perc_inf`), running this script performs language model inference and evaluation, producing all evaluation results.
+* For all methods except _perception inference_ (`perc_inf`), running this script performs language model inference and evaluation, producing all evaluation results.
 
-•The _perception inference_ method (`perc_inf`) does not include the question answering step. Running the script with this method only performs language model inference and produces `evaluated_responses_short_input_{model_name}.json/csv`.
+* The _perception inference_ method (`perc_inf`) does not include the question answering step. Running the script with this method only performs language model inference and produces `evaluated_responses_short_input_{model_name}.json/csv`.
 
 #### 2.**Perception Inference Evaluation (Only for** `perc_inf`**)**
 
@@ -154,9 +154,9 @@ python eval_percept_fantom-perc_inf.py --model {model_name} --method {method_nam
 
 **Result files saved in `results/Percept-FANToM/{model_name}-{method_name}/`:**
 
-•`utter_level_eval.csv`: Model predictions and ground truth of utterance-level perceivers
+* `utter_level_eval.csv`: Model predictions and ground truth of utterance-level perceivers
 
-•`ctx_level_eval.csv`: Model predictions and ground truth of context (part of conversation)-level perceivers
+* `ctx_level_eval.csv`: Model predictions and ground truth of context (part of conversation)-level perceivers
 
-•`perc_inf_acc.csv`: Perception inference accuracies for two scenarios — true belief (no ToM) / false belief (ToM)
+* `perc_inf_acc.csv`: Perception inference accuracies for two scenarios — true belief (no ToM) / false belief (ToM)
 
