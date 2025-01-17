@@ -11,6 +11,14 @@ This repository contains the code and dataset for the paper ["**Perceptions to B
   - [Experiments on the Percept-FANToM](#experiments-on-the-percept-fantom)
 ---
 
+## Requirements
+
+This project has been tested with Python 3.10.12.
+To install the required Python packages, run:
+```bash
+pip install -r requirements.txt
+```
+
 ## Perception-Augmented Theory of Mind Datasets
 
 ### Percept-ToMi
