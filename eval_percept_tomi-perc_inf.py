@@ -162,12 +162,12 @@ if __name__ == '__main__':
         ctx_result['perceiver_accuracy'].append(acc)
 
     df_ctx = pd.DataFrame(ctx_result)
-    df_ctx.to_csv( logs_dir / f'evaluated_context.csv', index=False)
-    print(f"Context-level evaluation result saved in 'evaluated_context.csv'")
+    df_ctx.to_csv( logs_dir / f'ctx_level_eval.csv', index=False)
+    print(f"Context-level evaluation result saved in 'ctx_level_eval.csv'")
 
     df_utter = pd.DataFrame(utter_result)
-    df_utter.to_csv( logs_dir / f'evaluated_utterance.csv', index=False)
-    print(f"Scene-level evaluation result saved in 'evaluated_utterance.csv'")
+    df_utter.to_csv( logs_dir / f'scene_level_eval.csv', index=False)
+    print(f"Scene-level evaluation result saved in 'scene_level_eval.csv'")
 
     print(f"\n<Utterance-level Acc. (Perc. Inf. Acc. defined in the paper)>")
     accs = []
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     result_df["num_scenes"] = totals
     
     acc_qtype_df = pd.DataFrame([accs, num_valid,  num_total], index=["acc", "# valid samples", "# total samples"], columns=["first order true belief", "first order false belief", "second order true belief", "second order false belief"]).round(3)
-    acc_qtype_df.to_csv(logs_dir / "acc_qType.csv")
+    acc_qtype_df.to_csv(logs_dir / "perc_inf_qType_acc.csv")
     
     scenario_accs = []
     num_valids = []
@@ -209,5 +209,5 @@ if __name__ == '__main__':
         num_valids.append(num_valid)
         num_totals.append(num_total)
     acc_scenario_df = pd.DataFrame([scenario_accs, num_valids, num_totals], index=["acc", "num_valids", "num_total"], columns=["true belief", "false belief"]).round(3)
-    acc_scenario_df.to_csv(logs_dir / "acc_scenario.csv")
+    acc_scenario_df.to_csv(logs_dir / "perc_inf_scenario_acc.csv")
     print(f"\n<Utterance-level Acc. aggregating first and second order questions>\n{acc_scenario_df}")

@@ -211,7 +211,6 @@ def parse_args():
             "vanilla", 
             "cot", 
             "s2a", 
-            "perceptom_oracle", 
             "simtom"
         ],
         help="The method to use."
@@ -293,13 +292,6 @@ if __name__=='__main__':
                 gt_perc_inf = json.loads(percept_tomi_df.loc[i].story_with_perceivers.replace("\'", "\""))
                 prompt = get_ptob_inf_prompt(gt_perc_inf, row['question'])
                 max_length = 600
-            elif ("perceptom_oracle" in args.method) and (row['qTypeRaw'] not in ["memory", "reality"]):
-                gt_persp_ctx = percept_tomi_df.loc[i].persp_ctx
-                kgt_story = get_kgt_story(gt_persp_ctx, row.char1, row.char2)
-                # test
-                q = row['question']
-                prompt, max_length = final_answer_prompt_formatting(args.model, kgt_story, q)
-                prompt = prompt.lstrip("Story: ")
             elif args.method=="perceptom" and args.perc_inf_result_exists:
                 prompt = None
                 generation = None
